@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>現在地の標高</title>
+    <!-- 画面の見た目の定義 -->
+    <style>
+        body {
+            font-family: Meiryo, Hiragino Sans, ヒラギノ角ゴシックArial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            text-align: center;
+            background-color: #FDF5E6;
+        }
+        h1 {
+            color: #333333;
+        }
+        #elevationButton {
+            background-color: #337ab7;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #comparison {
+            margin-top: 10px;
+        }
+        #illustration {
+    	    margin-top: 20px;
+            max-height: 260px;
+   	        width: auto;
+    	    opacity: 0;
+    	    transition: opacity 1s ease-in-out;
+            margin-left: auto;
+            margin-right: auto;
+	}
+    </style>
+</head>
+<!-- 画面の構造を定義 -->
+<body text="#333333">
+    <h1>現在地の標高を取得</h1>
+    <button id="elevationButton">標高を取得</button>
+    <div id="result"></div>
+    <div id="comparison"></div>
+    <img id="illustration" src="" alt="高さの比較" style="display: none;">
+    <!-- JavaScriptのコード -->
+    <script>
+        document.getElementById('elevationButton').addEventListener('click', getElevation);
+        // ボタン押下してWebAPIを利用するアクションを定義
+        function getElevation() {
+            if ("geolocation" in navigator) {
+                // ブラウザ標準の位置情報取得関数を利用
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude;
+                    var lon = position.coords.longitude;
+                    // WebAPIのリクエストURL
+                    var url = `https://cyberjapandata2.gsi.go.jp/general/dem/scripts/getelevation.php?lat=${lat}&lon=${lon}&outtype=JSON`;
+                    // 実際にリクエスト
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            var elevation = data.elevation;
+                            document.getElementById('result').innerHTML = `現在地の標高: ${elevation.toFixed(1)}m`;
+                            showComparison(elevation);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            document.getElementById('result').innerHTML = '標高の取得に失敗しました。';
+                        });
+                });
+            } else {
+                document.getElementById('result').innerHTML = 'Geolocationがサポートされていません。';
+            }
+        }
+        // 取得した標高に対するアクションを定義
+        function showComparison(elevation) {
+            let comparison = '';
+            let imageFile = '';
+
+            if (elevation <= 2) {
+                comparison = '人間の身長';
+                imageFile = 'figure_standing.png';
+            } else if (elevation <= 12) {
+                comparison = '鎌倉の大仏';
+                imageFile = 'kamakura_daibutsu.png';
+            } else if (elevation <= 32) {
+                comparison = 'マンション10階';
+                imageFile = 'mansion.png';
+            } else if (elevation <= 50) {
+                comparison = 'パリの凱旋門';
+                imageFile = 'gaisenmon.png';
+            } else if (elevation <= 68) {
+                comparison = '札幌ドーム';
+                imageFile = 'baseball_dome.png';
+            } else if (elevation <= 93) {
+                comparison = '自由の女神像（台座込み）';
+                imageFile = 'statue_of_liberty.png';
+            } else if (elevation <= 160) {
+                comparison = '高層ビル50階';
+                imageFile = 'building.png';
+            } else if (elevation <= 240) {
+                comparison = '東京都庁';
+                imageFile = 'building_tokyo_tochou.png';
+            } else if (elevation <= 333) {
+                comparison = '東京タワー';
+                imageFile = 'landmark_tower_tokyo.png';
+            } else if (elevation <= 634) {
+                comparison = '東京スカイツリー';
+                imageFile = 'landmark_tower_skytree.png';
+            } else {
+                comparison = '富士山';
+                imageFile = 'fujisan.png';
+            }
+            // 画像のアニメーションを定義
+            document.getElementById('comparison').innerHTML = comparison+'の高さより低いです（目安）';
+    		let illustrationElement = document.getElementById('illustration');
+    		illustrationElement.style.opacity = 0;
+    		illustrationElement.src = 'images/' + imageFile;
+    		illustrationElement.style.display = 'block';
+    		illustrationElement.onload = function() {
+       		setTimeout(() => {
+            		illustrationElement.style.opacity = 1;
+        	}, 500); 
+    	    };
+        }
+    </script>
+    <footer>
+  	<p>© All rights reserved by Anzai</p>
+  </footer>
+</body>
+</html>​​​​​​​​​​​​​​​​
