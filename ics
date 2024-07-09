@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カレンダーイベント追加</title>
+</head>
+<style type="text/css">
+.button {
+  display       : inline-block;
+  border-radius : 8%;          /* 角丸       */
+  font-size     : 14pt;        /* 文字サイズ */
+  text-align    : center;      /* 文字位置   */
+  cursor        : pointer;     /* カーソル   */
+  padding       : 25px 62px;   /* 余白       */
+  background    : #00007f;     /* 背景色     */
+  color         : #ffffff;     /* 文字色     */
+  line-height   : 1em;         /* 1行の高さ  */
+  opacity       : 1;           /* 透明度     */
+  transition    : .3s;         /* なめらか変化 */
+  box-shadow    : 2px 2px 9px #666666;  /* 影の設定 */
+}
+.button:hover {
+  box-shadow    : none;        /* カーソル時の影消去 */
+  opacity       : 0.8;         /* カーソル時透明度 */
+}
+</style>
+<body>
+    <h1>イベント予約完了</h1>
+    <p>以下のリンクをクリックして、イベントをカレンダーに追加してください:</p>
+
+    <a href="data:text/calendar;charset=utf8,BEGIN:VCALENDAR%0D%0AVERSION:2.0%0D%0APRODID:-//YourProduct//NONSGML v1.0//EN%0D%0ABEGIN:VEVENT%0D%0AUID:12345678-1234-1234-1234-1234567890ab%0D%0ADTSTAMP:20240709T090000Z%0D%0ADTSTART:20240717T050000Z%0D%0ADTEND:20240717T060000Z%0D%0ASUMMARY:%E6%AD%AF%E5%8C%BB%E8%80%85%0D%0ADESCRIPTION:%E6%AD%AF%E5%8C%BB%E8%80%85%E3%81%AE%E4%BA%88%E7%B4%84%0D%0ALOCATION:https%3A%2F%2Fwww.fukawa-kyousei.com%2Fprice%2F%0D%0AEND:VEVENT%0D%0AEND:VCALENDAR" download="event.ics" class="button">カレンダーに追加</a>
+
+</body>
+</html>
